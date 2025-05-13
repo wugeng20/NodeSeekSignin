@@ -51,13 +51,12 @@ requests
 ## 📝 注意事项
 
 - Cookie 到期后需重新获取
-- 获取 Cookie 方法：
+- 获取 Cookie 方法（百度搜索：获取Cookie方法）：
   - 1、登录后，按下F12
   - 2、点击Network
   - 3、刷新网页查看Network界面的变化
   - 4、点击Network界面下的Headers
   - 5、找到Cookie并复制后面内容
-![获取Cookie](https://i-blog.csdnimg.cn/blog_migrate/9f001f3873a8da041dde84f56d44300c.png)
 
 ## 📸 效果示例
 
@@ -88,6 +87,6 @@ requests
 时间：2025-05-13 14:09:36
 ```
 
-## 📌 免责声明
+## 📌 免责声
 
-此库所有内容仅用于个人学习交流！！！，请勿用于非法用途。请遵守 NodeSeek 论坛的相关规定和条款。
+此库所有内容仅用于个人学习交流！！！请勿用于非法用途。请遵守 NodeSeek 论坛的相关规定和条款。
