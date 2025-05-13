@@ -22,8 +22,8 @@
 类型：公开仓库
 链接：https://github.com/wugeng20/NodeSeekSignin.git
 定时类型：crontab
-定时规则：2 1 28 * *
-白名单：mian.py
+定时规则：20 2 * * 0
+白名单：mian
 文件后缀：py
 ```
 
@@ -52,8 +52,12 @@ requests
 
 - Cookie 到期后需重新获取
 - 获取 Cookie 方法：
-  - 登录后按 F12 打开开发者工具
-  - 进入 Application -> Cookies 复制 nodeseek 的值
+  - 1、登录后，按下F12
+  - 2、点击Network
+  - 3、刷新网页查看Network界面的变化
+  - 4、点击Network界面下的Headers
+  - 5、找到Cookie并复制后面内容
+![获取Cookie](https://i-blog.csdnimg.cn/blog_migrate/9f001f3873a8da041dde84f56d44300c.png)
 
 ## 📸 效果示例
 
