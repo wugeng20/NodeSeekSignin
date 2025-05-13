@@ -1,3 +1,13 @@
+# cron:20 9 * * *
+# new Env('NodeSeek签到');
+"""
+NodeSeek论坛 - 自动签到Cookie版
+Version: 1.0.0
+Last Updated: 2025-5-13 16:21:43
+Author: G.E.N.G
+GitHub: https://github.com/wugeng20
+Description: 用于 NodeSeek 论坛的每日自动签到，支持消息推送至钉钉机器人
+"""
 import base64
 import hashlib
 import hmac
@@ -6,6 +16,11 @@ import time
 import urllib.parse
 
 from curl_cffi import requests
+
+# ==============================================
+# 配置区域 (Configuration Section)
+# 所有配置通过环境变量获取，便于青龙面板管理
+# ==============================================
 
 # NodeSeek环境变量
 ## 获取NodeSeek Cookie环境变量
@@ -24,19 +39,34 @@ DD_BOT_TOKEN = os.environ.get("DD_BOT_TOKEN", "")
 ## 钉钉机器人Secret
 DD_BOT_SECRET = os.environ.get("DD_BOT_SECRET", "")
 
+# ==============================================
+# 工具函数 (Utility Functions)
+# ==============================================
+
 
 # 延时函数
 def delay(seconds):
+    """延时函数，避免请求频率过高"""
     time.sleep(seconds)
+
+
+# ==============================================
+# 核心功能 (Core Functions)
+# ==============================================
 
 
 # NodeSeek用户信息，不设置NodeSeek成员ID则不显示
 def ns_info(ns_member_id):
+    """
+    获取NodeSeek用户信息
+    :param ns_member_id: 用户ID
+    :return: 格式化后的用户信息字符串
+    """
     if not ns_member_id:
         print(
             "未设置NodeSeek成员ID，请检测NS_MEMBER_ID环境变量设置是否正确，跳过NodeSeek用户信息获取"
         )
-        return
+        return ""
 
     url = f"https://www.nodeseek.com/api/account/getInfo/{ns_member_id}?readme=1"
     headers = {
@@ -66,6 +96,12 @@ def ns_info(ns_member_id):
 
 # NodeSeek签到
 def ns_signin(ns_cookie, ns_random="true"):
+    """
+    NodeSeek签到函数
+    :param ns_cookie: 用户Cookie
+    :param ns_random: 是否随机签到
+    :return: 签到结果信息
+    """
     if not ns_cookie:
         print("未设置NodeSeek Cookie，请检查NS_COOKIE环境变量设置是否正确")
         return "签到失败：未设置NodeSeek Cookie，请检查NS_COOKIE环境变量设置是否正确"
@@ -101,6 +137,16 @@ def ns_signin(ns_cookie, ns_random="true"):
 
 # 消息推送到钉钉
 def send_to_dingtalk(token, secret, message):
+    """
+    发送消息到钉钉机器人
+    :param token: 机器人Token
+    :param secret: 机器人Secret
+    :param message: 要发送的消息
+    """
+    if not token:  # 只有配置了钉钉token才推送
+        print("未配置钉钉机器人，跳过消息推送")
+        return
+
     # 生成时间戳和签名
     timestamp = str(round(time.time() * 1000))
     secret_enc = secret.encode("utf-8")
@@ -126,6 +172,9 @@ def send_to_dingtalk(token, secret, message):
         print("消息推送失败：", response)
 
 
+# ==============================================
+# 主程序入口 (Main Entry)
+# ==============================================
 if __name__ == "__main__":
     print("===========================正在进行NodeSeek签到==========================")
     # 示例输出：签到信息:今天已完成签到，请勿重复操作
