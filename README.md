@@ -21,7 +21,7 @@
 链接：https://github.com/wugeng20/NodeSeekSignin.git
 定时类型：crontab
 定时规则：20 2 * * 0
-白名单：mian
+白名单：main
 文件后缀：py
 ```
 
