@@ -1,4 +1,4 @@
-# cron:10 00 * * *
+# cron:0 0 * * *
 # new Env('NodeSeek签到');
 """
 NodeSeek论坛 - 自动签到Cookie版
