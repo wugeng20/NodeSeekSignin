@@ -183,7 +183,7 @@ def message_push(title, message):
     """
     response = QLAPI.systemNotify({"title": title, "content": message})
 
-    if response.status_code == 200:
+    if response.get("code", 400) == 200:
         print("消息推送成功：", response)
     else:
         print("消息推送失败：", response)
