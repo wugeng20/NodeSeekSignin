@@ -1,12 +1,13 @@
-# cron:20 9 * * *
+# cron:10 00 * * *
 # new Env('NodeSeek签到');
 """
 NodeSeek论坛 - 自动签到Cookie版
-Version: 1.0.0
-Last Updated: 2025-5-13 16:21:43
+Version: 1.0.1
+create Time: 2025-5-13 16:21:43
+Last Updated: 2025-6-19 00:12:22
 Author: G.E.N.G
 GitHub: https://github.com/wugeng20
-Description: 用于 NodeSeek 论坛的每日自动签到，支持消息推送至钉钉机器人
+Description: 用于 NodeSeek 论坛的每日自动签到，支持消息推送通知（调用青龙系统通知API）。
 """
 import base64
 import hashlib
@@ -32,7 +33,10 @@ NS_RANDOM = os.environ.get("NS_RANDOM", "true")
 ## NodeSeek成员ID，https://www.nodeseek.com/space/26589 ->26589就是成员ID
 NS_MEMBER_ID = os.environ.get("NS_MEMBER_ID", "")
 
-# 钉钉机器人通知
+# 钉钉机器人通知（本地运行，直接填写下面三个环境变量即可）
+## 本地运行请给为True，默认为False，调用青龙系统通知API
+DD_BOT_ENABLE = False
+
 ## 钉钉机器人Token,access_token=XXX 等于=符号后面的XXX即可
 DD_BOT_TOKEN = os.environ.get("DD_BOT_TOKEN", "")
 
@@ -161,11 +165,24 @@ def send_to_dingtalk(token, secret, message):
     headers = {"Content-Type": "application/json"}
     data = {
         "msgtype": "text",
-        "text": {
-            "content": f"「NodeSeek签到」\n{message}\n时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}"
-        },
+        "text": {"content": f"「NodeSeek签到」\n{message}"},
     }
     response = requests.post(url, json=data, headers=headers)
+    if response.status_code == 200:
+        print("消息推送成功：", response)
+    else:
+        print("消息推送失败：", response)
+
+
+# 消息推送（调用的是青龙系统通知API）
+def message_push(title, message):
+    """
+    消息推送通知
+    :param title: 消息标题
+    :param message: 消息内容
+    """
+    response = QLAPI.systemNotify({"title": title, "content": message})
+
     if response.status_code == 200:
         print("消息推送成功：", response)
     else:
@@ -178,15 +195,37 @@ def send_to_dingtalk(token, secret, message):
 if __name__ == "__main__":
     print("===========================正在进行NodeSeek签到==========================")
     # 示例输出：签到信息:今天已完成签到，请勿重复操作
-    ns_signin_data = ns_signin(NS_COOKIE, NS_RANDOM)
-    print(ns_signin_data)
+    try:
+        ns_signin_data = ns_signin(NS_COOKIE, NS_RANDOM)
+        print(ns_signin_data)
+    except Exception as e:
+        ns_signin_data = (
+            "NodeSeek签到报错：NodeSeek签到失败，请检查Cookie是否正确或者失效。"
+        )
+        print("NodeSeek签到报错，错误信息: ", str(e))
+        print(ns_signin_data)
     delay(3)  # 等待3秒
     print("=========================正在获取NodeSeek用户信息=========================")
     # 示例输出：用户信息：\n【用户】：WG\n【等级】：1\n【鸡腿数目】：226\n【主题帖数】：0\n【评论数】：5
-    ns_info_data = ns_info(NS_MEMBER_ID)
-    print(ns_info_data)
+    try:
+        ns_info_data = ns_info(NS_MEMBER_ID)
+        print(ns_info_data)
+    except Exception as e:
+        ns_info_data = (
+            "NodeSeek用户信息获取失败：请检查成员ID是否正确、Cookie是否正确或者失效。"
+        )
+        print("NodeSeek用户信息获取失败，错误信息: ", str(e))
+        print(ns_info_data)
     print("=========================正在推送NodeSeek签到信息=========================")
-    send_to_dingtalk(
-        DD_BOT_TOKEN, DD_BOT_SECRET, str(ns_info_data) + "\n" + str(ns_signin_data)
-    )
+    try:
+        content = f"{str(ns_info_data)}\n{str(ns_signin_data)}\n时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}"
+        if DD_BOT_ENABLE:
+            send_to_dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, content)
+        else:
+            message_push("「NodeSeek签到」", content)
+    except Exception as e:
+        print("推送失败，错误信息: ", str(e))
+        print(
+            "1、本地运行：请检查DD_BOT_ENABLE、DD_BOT_TOKEN和DD_BOT_SECRET环境变量是否正确\n2、青龙面板：请检查青龙系统设置-》通知设置-》是否配置。"
+        )
     print("=============================NodeSeek运行结束============================")
