@@ -1,6 +1,7 @@
 # 🎉 NodeSeek论坛 - 自动签到Cookie版
 
 📌 用于 NodeSeek 论坛的每日自动签到，支持消息推送。
+
 📢 目前 NodeSeek 论坛加强Cloudflare验证，可能随时会失效，请关注项目更新。
 
 ## 🔥 功能特性
@@ -47,6 +48,7 @@ git+https://github.com/VeNoMouS/cloudscraper.git
 | `DD_BOT_SECRET` | 否   | 无     | 钉钉机器人加签密钥(选择加签安全模式时需要)    |
 
 ## 📝 注意事项
+
 - 请使用海外服务器部署，否则可能无法访问导致签到失败。
 - 青龙面板开启通知：在青龙面板 -> 系统设置 -> 通知设置 -> 设置通知方式，配置相关选项。
   - 关闭青龙面板通知一言：在青龙面板 -> notify.py和sendNotify.js文件 -> 搜索“HITOKOTO”变量名 -> 把'HITOKOTO'的值：notify.py改为False，sendNotify.js改为false, 即可关闭通知一言。
