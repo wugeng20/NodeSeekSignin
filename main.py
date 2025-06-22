@@ -1,10 +1,10 @@
-# cron:0 0 * * *
+# cron:10 0 * * *
 # new Env('NodeSeek签到');
 """
 NodeSeek论坛 - 自动签到Cookie版
-Version: 1.0.1
+Version: 1.0.2
 create Time: 2025-5-13 16:21:43
-Last Updated: 2025-6-19 00:12:22
+Last Updated: 2025-6-22 18:57:49
 Author: G.E.N.G
 GitHub: https://github.com/wugeng20
 Description: 用于 NodeSeek 论坛的每日自动签到，支持消息推送通知（调用青龙系统通知API）。
@@ -13,10 +13,31 @@ import base64
 import hashlib
 import hmac
 import os
+import random
 import time
 import urllib.parse
 
-from curl_cffi import requests
+import cloudscraper
+
+# ==============================================
+# 初始化cloudscraper
+# ==============================================
+scraper = cloudscraper.create_scraper(
+    interpreter="js2py",
+    delay=6,
+    enable_stealth=True,
+    stealth_options={
+        "min_delay": 5.0,
+        "max_delay": 10.0,
+        "human_like_delays": True,
+        "randomize_headers": True,
+        "browser_quirks": True,
+    },
+    # Browser emulation
+    browser="chrome",
+    # Debug mode
+    debug=False,
+)
 
 # ==============================================
 # 配置区域 (Configuration Section)
@@ -48,10 +69,13 @@ DD_BOT_SECRET = os.environ.get("DD_BOT_SECRET", "")
 # ==============================================
 
 
-# 延时函数
-def delay(seconds):
-    """延时函数，避免请求频率过高"""
-    time.sleep(seconds)
+# 随机等待
+def wait_random_interval(min_seconds, max_seconds):
+    """等待min_seconds到max_seconds之间的随机时长"""
+    delay = random.uniform(min_seconds, max_seconds)
+    print(f"等待 {delay:.2f} 秒后继续...")
+    time.sleep(delay)
+    print("执行下一步操作！")
 
 
 # ==============================================
@@ -88,7 +112,7 @@ def ns_info(ns_member_id):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
     }
     try:
-        response = requests.get(url, headers=headers, impersonate="chrome110")
+        response = scraper.get(url, headers=headers)
         # 示例：{'success': True, 'detail': {'member_id': 26589, 'member_name': 'WG', 'isAdmin': 0, 'rank': 1, 'coin': 226, 'bio': '技术宅拯救世界！', 'created_at': '2025-02-02T05:52:33.000Z', 'nPost': 0, 'nComment': 5, 'follows': 0, 'fans': 0, 'created_at_str': '99days ago', 'roles': []}}
         data = response.json()
         ns_user_data = data["detail"]
@@ -129,7 +153,7 @@ def ns_signin(ns_cookie, ns_random="true"):
     }
 
     try:
-        response = requests.post(url, headers=headers, impersonate="chrome110")
+        response = scraper.post(url, headers=headers)
         # 示例：{'success': False, 'message': '今天已完成签到，请勿重复操作'}
         data = response.json()
         msg = data.get("message", "")
@@ -167,7 +191,7 @@ def send_to_dingtalk(token, secret, message):
         "msgtype": "text",
         "text": {"content": f"「NodeSeek签到」\n{message}"},
     }
-    response = requests.post(url, json=data, headers=headers)
+    response = scraper.post(url, json=data, headers=headers)
     if response.status_code == 200:
         print("消息推送成功：", response)
     else:
@@ -193,27 +217,24 @@ def message_push(title, message):
 # 主程序入口 (Main Entry)
 # ==============================================
 if __name__ == "__main__":
+    wait_random_interval(5, 20)  # 随机等待10-20秒
     print("===========================正在进行NodeSeek签到==========================")
     # 示例输出：签到信息:今天已完成签到，请勿重复操作
     try:
         ns_signin_data = ns_signin(NS_COOKIE, NS_RANDOM)
         print(ns_signin_data)
     except Exception as e:
-        ns_signin_data = (
-            "NodeSeek签到报错：NodeSeek签到失败，请检查Cookie是否正确或者失效。"
-        )
+        ns_signin_data = "NodeSeek签到报错：NodeSeek签到失败，请检查Cookie是否正确或者失效，官网是否加强Cloudflare。"
         print("NodeSeek签到报错，错误信息: ", str(e))
         print(ns_signin_data)
-    delay(3)  # 等待3秒
+    wait_random_interval(5, 20)  # 随机等待10-20秒
     print("=========================正在获取NodeSeek用户信息=========================")
     # 示例输出：用户信息：\n【用户】：WG\n【等级】：1\n【鸡腿数目】：226\n【主题帖数】：0\n【评论数】：5
     try:
         ns_info_data = ns_info(NS_MEMBER_ID)
         print(ns_info_data)
     except Exception as e:
-        ns_info_data = (
-            "NodeSeek用户信息获取失败：请检查成员ID是否正确、Cookie是否正确或者失效。"
-        )
+        ns_info_data = "NodeSeek用户信息获取失败：请检查成员ID是否正确。"
         print("NodeSeek用户信息获取失败，错误信息: ", str(e))
         print(ns_info_data)
     print("=========================正在推送NodeSeek签到信息=========================")

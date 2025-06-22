@@ -1,12 +1,13 @@
 # 🎉 NodeSeek论坛 - 自动签到Cookie版
 
 📌 用于 NodeSeek 论坛的每日自动签到，支持消息推送。
+📢 目前 NodeSeek 论坛加强Cloudflare验证，可能随时会失效，请关注项目更新。
 
 ## 🔥 功能特性
 
 - 支持随机/固定签到模式
 - 查询用户等级、鸡腿数、发帖数等数据
-- 钉钉机器人（已测试）、Telegram机器人、企业微信机器人、邮箱（已测试）、Server酱、PushDeer等等通知签到结果（调用青龙通知API，具体自行测试）
+- 钉钉机器人、Telegram机器人、企业微信机器人、邮箱、Server酱、PushDeer等等通知签到结果（调用青龙通知API，具体自行测试）
 - 支持青龙面板部署、本地运行（本地只支持钉钉机器人通知，其他需要自行添加）
 
 ## 🚀 使用指南（青龙面板）
@@ -27,11 +28,10 @@
 
 ### 2. 依赖安装
 
-在青龙面板 -> 依赖管理 -> Python3 添加以下Python库：
+在青龙面板 -> 依赖管理 -> Python3 ->名称 添加以下Python库：
 
 ```bash
-curl_cffi
-requests
+git+https://github.com/VeNoMouS/cloudscraper.git
 ```
 
 ### 3. 配置环境变量
@@ -47,7 +47,7 @@ requests
 | `DD_BOT_SECRET` | 否   | 无     | 钉钉机器人加签密钥(选择加签安全模式时需要)    |
 
 ## 📝 注意事项
-
+- 请使用海外服务器部署，否则可能无法访问导致签到失败。
 - 青龙面板开启通知：在青龙面板 -> 系统设置 -> 通知设置 -> 设置通知方式，配置相关选项。
   - 关闭青龙面板通知一言：在青龙面板 -> notify.py和sendNotify.js文件 -> 搜索“HITOKOTO”变量名 -> 把'HITOKOTO'的值：notify.py改为False，sendNotify.js改为false, 即可关闭通知一言。
 - Cookie 到期后需重新获取【非常重要】
