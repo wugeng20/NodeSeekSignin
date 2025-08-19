@@ -40,14 +40,14 @@ git+https://github.com/VeNoMouS/cloudscraper.git
 
 在青龙面板 -> 环境变量 添加以下变量，`NS_COOKIE`必须添加：
 
-| 变量名            | 必填 | 默认值 | 说明                                                          |
-| ----------------- | ---- | ------ | ------------------------------------------------------------- |
-| `NS_COOKIE`     | 是   | 无     | NodeSeek 登录 Cookie，F12 控制台获取                          |
-| `NS_RANDOM`     | 否   | true   | 签到模式: true(随机鸡腿)/false(固定5个鸡腿)                   |
-| `NS_MEMBER_ID`  | 否   | 无     | 成员ID，用于查询账户信息(空间页URL中的数字ID)                 |
-| `NS_PROXIES`    | 否   | 无     | 代理配置，通过代理实现本地或国内请求，多个请用","英文逗号隔开 |
-| `DD_BOT_TOKEN`  | 否   | 无     | 钉钉机器人 access_token 的 Token 部分                         |
-| `DD_BOT_SECRET` | 否   | 无     | 钉钉机器人加签密钥(选择加签安全模式时需要)                    |
+| 变量名            | 必填 | 默认值 | 说明                                          |
+| ----------------- | ---- | ------ | --------------------------------------------- |
+| `NS_COOKIE`     | 是   | 无     | NodeSeek 登录 Cookie，F12 控制台获取          |
+| `NS_RANDOM`     | 否   | true   | 签到模式: true(随机鸡腿)/false(固定5个鸡腿)   |
+| `NS_MEMBER_ID`  | 否   | 无     | 成员ID，用于查询账户信息(空间页URL中的数字ID) |
+| `NS_PROXIES`    | 否   | 无     | 代理配置：http/https，多个请用","英文逗号隔开 |
+| `DD_BOT_TOKEN`  | 否   | 无     | 钉钉机器人 access_token 的 Token 部分         |
+| `DD_BOT_SECRET` | 否   | 无     | 钉钉机器人加签密钥(选择加签安全模式时需要)    |
 
 ## 📝 注意事项
 
