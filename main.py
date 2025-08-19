@@ -22,7 +22,18 @@ import cloudscraper
 # ==============================================
 # 初始化cloudscraper
 # ==============================================
+# 获取代理环境变量
+proxies = []
+NS_PROXIES = os.environ.get("NS_PROXIES", None)
+if NS_PROXIES:
+    proxies = [proxy for proxy in NS_PROXIES.split(",")]
+
+# cloudscraper基础配置
 scraper = cloudscraper.create_scraper(
+    # 代理配置
+    rotating_proxies=proxies,
+    proxy_options={"rotation_strategy": "smart", "ban_time": 300},
+    # 基础配置
     interpreter="js2py",
     delay=6,
     enable_stealth=True,
