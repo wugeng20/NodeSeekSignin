@@ -1,5 +1,3 @@
-# cron:10 0 * * *
-# new Env('NodeSeek签到');
 """
 NodeSeek论坛 - 自动签到Cookie版
 Version: 1.0.2
@@ -9,6 +7,7 @@ Author: G.E.N.G
 GitHub: https://github.com/wugeng20
 Description: 用于 NodeSeek 论坛的每日自动签到，支持消息推送通知（调用青龙系统通知API）。
 """
+
 import base64
 import hashlib
 import hmac
