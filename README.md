@@ -1,7 +1,9 @@
 # 🎉 NodeSeek&DeepFlood论坛-自动签到Cookie版
 
 📌 用于`NodeSeek`和`DeepFlood`论坛的每日自动签到，支持消息推送。
+
 📌 推荐到论坛手动签到，本项目主要懒人和容易忘记签到的伙伴使用。
+
 📢 目前NodeSeek、DeepFlood论坛加强Cloudflare验证，可能随时会失效，请实时关注Cookie的更新和本项目更新。
 
 ## 🔥 功能特性
