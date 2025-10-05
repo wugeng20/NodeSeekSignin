@@ -21,12 +21,11 @@
 在青龙面板 -> 订阅管理 -> 添加订阅 -> 添加以下信息：
 
 ```bash
-名称：ND论坛签到
+名称：NSDF论坛签到
 类型：公开仓库
 链接：https://github.com/wugeng20/NodeSeekSignin.git
 定时类型：crontab
 定时规则：20 2 * * 0
-白名单：main
 文件后缀：py
 ```
 
@@ -81,7 +80,7 @@ git+https://github.com/VeNoMouS/cloudscraper.git
 随机等待 15.39 秒后继续操作...
 等待结束，执行下一步
 用户信息：
-【用户】：WG
+【用户】：示例
 【等级】：3
 【鸡腿数目】：1029
 【主题帖数】：1
@@ -102,7 +101,7 @@ git+https://github.com/VeNoMouS/cloudscraper.git
 随机等待 17.05 秒后继续操作...
 等待结束，执行下一步
 用户信息：
-【用户】：WG
+【用户】：示例
 【等级】：1
 【鸡腿数目】：113
 【主题帖数】：0
@@ -118,7 +117,7 @@ git+https://github.com/VeNoMouS/cloudscraper.git
 「NodeSeek签到」
 
 用户信息：
-【用户】：WG
+【用户】：示例
 【等级】：3
 【鸡腿数目】：1029
 【主题帖数】：1
@@ -126,11 +125,11 @@ git+https://github.com/VeNoMouS/cloudscraper.git
 签到信息：今天的签到收益是5个鸡腿
 时间：2025-10-05 00:00:48
 
- 「DeepFlood签到」
+「DeepFlood签到」
 
 【DeepFlood】
 用户信息：
-【用户】：WG
+【用户】：示例
 【等级】：1
 【鸡腿数目】：113
 【主题帖数】：0
